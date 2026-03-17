@@ -59,21 +59,22 @@ class Gatling extends Creature {
         super(name, maxPower, image);
     }
 
-    modifyTakenDamage(value, fromCard, gameContext, continuation) {
-        this.view.signalAbility(() => {
-            value -= 1;
-            if (value < 0) {
-                value = 0;
-            }
-            super.modifyTakenDamage(value, fromCard, gameContext, continuation);
-        });
-    }
-    getDescriptions() {
-        return [
-            "если Громилу атакуют, то он получает на 1 меньше урона.",
-            super.getDescriptions(this),
-        ];
-    }
+    attack(gameContext, continuation) {
+        const taskQueue = new TaskQueue();
+
+        const {currentPlayer, oppositePlayer, position, updateView} = gameContext;
+
+        for(const oppositeCard in oppositePlayer.table){
+            taskQueue.push(onDone => this.view.showAttack(onDone));
+            taskQueue.push(onDone => {
+                if (oppositeCard) {
+                    this.dealDamageToCreature(this.currentPower, oppositeCard, gameContext, onDone);
+                }
+            });
+        }
+
+        taskQueue.continueWith(continuation);
+    };
 }
 
 // Отвечает является ли карта уткой.
@@ -116,7 +117,7 @@ const seriffStartDeck = [
 
 // Колода Бандита, верхнего игрока.
 const banditStartDeck = [
-    new Trasher()
+    new Gatling()
 ];
 
 
