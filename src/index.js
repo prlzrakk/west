@@ -46,7 +46,29 @@ class Trasher extends Dog {
             super.modifyTakenDamage(value, fromCard, gameContext, continuation);
         });
     }
-    getDescription() {
+    getDescriptions() {
+        return [
+            "если Громилу атакуют, то он получает на 1 меньше урона.",
+            super.getDescriptions(this),
+        ];
+    }
+}
+
+class Gatling extends Creature {
+    constructor(name = "Гатлинг", maxPower = 6, image) {
+        super(name, maxPower, image);
+    }
+
+    modifyTakenDamage(value, fromCard, gameContext, continuation) {
+        this.view.signalAbility(() => {
+            value -= 1;
+            if (value < 0) {
+                value = 0;
+            }
+            super.modifyTakenDamage(value, fromCard, gameContext, continuation);
+        });
+    }
+    getDescriptions() {
         return [
             "если Громилу атакуют, то он получает на 1 меньше урона.",
             super.getDescriptions(this),
