@@ -32,6 +32,28 @@ class Dog extends Creature {
     }
 }
 
+class Trasher extends Dog {
+    constructor(name = "Громила", maxPower = 5, image) {
+        super(name, maxPower, image);
+    }
+
+    modifyTakenDamage(value, fromCard, gameContext, continuation) {
+        this.view.signalAbility(() => {
+            value -= 1;
+            if (value < 0) {
+                value = 0;
+            }
+            super.modifyTakenDamage(value, fromCard, gameContext, continuation);
+        });
+    }
+    getDescription() {
+        return [
+            "если Громилу атакуют, то он получает на 1 меньше урона.",
+            super.getDescriptions(this),
+        ];
+    }
+}
+
 // Отвечает является ли карта уткой.
 function isDuck(card) {
     return card && card.quacks && card.swims;
@@ -63,7 +85,6 @@ function getCreatureDescription(card) {
 // Основа для собаки.
 
 
-
 // Колода Шерифа, нижнего игрока.
 const seriffStartDeck = [
     new Duck(),
@@ -73,7 +94,7 @@ const seriffStartDeck = [
 
 // Колода Бандита, верхнего игрока.
 const banditStartDeck = [
-    new Dog()
+    new Trasher()
 ];
 
 
