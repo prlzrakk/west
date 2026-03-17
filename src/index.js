@@ -117,6 +117,15 @@ class Lad extends Dog {
     };
 
 
+    // getDescriptions() {
+    //     const condition =
+    //         Lad.prototype.hasOwnProperty('modifyDealedDamageToCreature')
+    //         && Lad.prototype.hasOwnProperty('modifyTakenDamage');
+    //     const description = condition ? ["Чем их больше, тем они сильнее"] : [];
+    //     return description + [
+    //         super.getDescriptions(this),
+    //     ];
+    // }
 
 }
 
@@ -156,12 +165,10 @@ const seriffStartDeck = [
     new Duck(),
     new Duck(),
     new Duck(),
-    new Gatling(),
 ];
 const banditStartDeck = [
-    new Trasher(),
-    new Dog(),
-    new Dog(),
+    new Lad(),
+    new Lad(),
 ];
 
 
