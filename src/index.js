@@ -46,6 +46,7 @@ class Trasher extends Dog {
             super.modifyTakenDamage(value, fromCard, gameContext, continuation);
         });
     }
+
     getDescriptions() {
         return [
             "если Громилу атакуют, то он получает на 1 меньше урона.",
@@ -62,7 +63,7 @@ class Gatling extends Creature {
     attack(gameContext, continuation) {
         const taskQueue = new TaskQueue();
         const {currentPlayer, oppositePlayer, position, updateView} = gameContext;
-        for(let position = 0; position < oppositePlayer.table.length; position++) {
+        for (let position = 0; position < oppositePlayer.table.length; position++) {
             taskQueue.push(onDone => {
                 const card = oppositePlayer.table[position];
                 if (card) {
@@ -72,6 +73,51 @@ class Gatling extends Creature {
         }
         taskQueue.continueWith(continuation);
     };
+}
+
+class Lad extends Dog {
+    static getInGameCount() {
+        return this.inGameCount || 0;
+    }
+
+    static setInGameCount(value) {
+        this.inGameCount = value;
+    }
+
+    static getBonus() {
+        return (this.getInGameCount() * (this.getInGameCount() + 1)) / 2;
+    }
+
+    constructor(name = 'Браток', maxPower = 2, image) {
+        super(name, maxPower, image);
+    }
+
+    doAfterComingIntoPlay(gameContext, continuation) {
+        Lad.setInGameCount(Lad.getInGameCount() + 1);
+        super.doAfterComingIntoPlay(gameContext, continuation);
+    };
+
+    doBeforeRemoving(continuation) {
+        if (Lad.getInGameCount() > 0) {
+            Lad.setInGameCount(Lad.getInGameCount() - 1);
+        }
+        super.doBeforeRemoving(continuation);
+    };
+
+    modifyDealedDamageToCreature (value, toCard, gameContext, continuation) {
+        value += Lad.getBonus();
+        super.modifyDealedDamageToCreature(value, gameContext, continuation);
+    };
+
+    modifyTakenDamage (value, fromCard, gameContext, continuation) {
+        if (value > 0) {
+            value -= Lad.getBonus();
+        }
+        super.modifyTakenDamage(value, fromCard, gameContext, continuation);
+    };
+
+
+
 }
 
 // Отвечает является ли карта уткой.
