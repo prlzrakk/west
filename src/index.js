@@ -106,7 +106,7 @@ class Lad extends Dog {
 
     modifyDealedDamageToCreature (value, toCard, gameContext, continuation) {
         value += Lad.getBonus();
-        super.modifyDealedDamageToCreature(value, gameContext, continuation);
+        super.modifyDealedDamageToCreature(value, toCard, gameContext, continuation);
     };
 
     modifyTakenDamage (value, fromCard, gameContext, continuation) {
@@ -117,15 +117,16 @@ class Lad extends Dog {
     };
 
 
-    // getDescriptions() {
-    //     const condition =
-    //         Lad.prototype.hasOwnProperty('modifyDealedDamageToCreature')
-    //         && Lad.prototype.hasOwnProperty('modifyTakenDamage');
-    //     const description = condition ? ["Чем их больше, тем они сильнее"] : [];
-    //     return description + [
-    //         super.getDescriptions(this),
-    //     ];
-    // }
+    getDescriptions() {
+        const condition =
+            Lad.prototype.hasOwnProperty('modifyDealedDamageToCreature')
+            && Lad.prototype.hasOwnProperty('modifyTakenDamage');
+        const description = condition ? ["Чем их больше, тем они сильнее"] : [];
+        return  [
+            ...description,
+            ...super.getDescriptions(this),
+        ];
+    }
 
 }
 
